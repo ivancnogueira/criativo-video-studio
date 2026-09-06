@@ -1,0 +1,27 @@
+{
+  "name": "criativo-video-studio",
+  "version": "1.0.0",
+  "description": "Motor de edição de vídeo cinematográfico (Faceless & Talking Head) com Remotion para Criativo AI Studio",
+  "private": true,
+  "scripts": {
+    "dev": "remotion preview src/Root.tsx",
+    "preview": "remotion preview src/Root.tsx",
+    "render": "node automacoes/renderizar.mjs",
+    "transcrever": "node automacoes/transcrever.mjs",
+    "stock": "node automacoes/buscar-stock.mjs"
+  },
+  "dependencies": {
+    "@remotion/captions": "^4.0.240",
+    "@remotion/cli": "^4.0.240",
+    "@remotion/media-utils": "^4.0.240",
+    "@remotion/player": "^4.0.240",
+    "@remotion/shapes": "^4.0.240",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "remotion": "^4.0.240"
+  },
+  "devDependencies": {
+    "@types/react": "^18.3.12",
+    "typescript": "^5.6.3"
+  }
+}
