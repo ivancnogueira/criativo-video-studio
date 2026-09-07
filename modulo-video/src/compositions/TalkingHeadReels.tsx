@@ -4,6 +4,7 @@ import { ZoomContainer } from '../components/ZoomContainer';
 import { InfographicCard } from '../components/InfographicCard';
 import { Subtitles, WordToken } from '../components/Subtitles';
 import { KenBurnsScene } from '../components/KenBurnsScene';
+import { ColorGrade, ColorGradePreset } from '../components/ColorGrade';
 
 export interface BrollOverlay {
   id: string;
@@ -11,6 +12,13 @@ export interface BrollOverlay {
   isVideo?: boolean;
   startInSeconds: number;
   durationInSeconds: number;
+}
+
+export interface SfxItem {
+  id: string;
+  soundUrl: string;
+  startInSeconds: number;
+  volume?: number;
 }
 
 export interface TalkingHeadReelsProps {
@@ -30,6 +38,8 @@ export interface TalkingHeadReelsProps {
   }[];
   subtitlesWords: WordToken[];
   brandHighlightColor?: string;
+  colorGradePreset?: ColorGradePreset;
+  sfxTracks?: SfxItem[];
 }
 
 export const TalkingHeadReels: React.FC<TalkingHeadReelsProps> = ({
@@ -41,6 +51,8 @@ export const TalkingHeadReels: React.FC<TalkingHeadReelsProps> = ({
   infographics = [],
   subtitlesWords = [],
   brandHighlightColor = '#00FF88',
+  colorGradePreset = 'dark-moody',
+  sfxTracks = [],
 }) => {
   const frame = useCurrentFrame();
   const { fps } = useVideoConfig();
@@ -62,22 +74,34 @@ export const TalkingHeadReels: React.FC<TalkingHeadReelsProps> = ({
         overflow: 'hidden',
       }}
     >
-      {/* Trilha Sonora Sutil de Fundo */}
+      {/* 1. Trilha Sonora Sutil de Fundo */}
       {backgroundMusicUrl && (
         <Audio src={backgroundMusicUrl} volume={musicVolume} loop />
       )}
 
-      {/* Vídeo Principal da Pessoa Falando com Zoom Dinâmico */}
-      <ZoomContainer isZoomed={isZoomed}>
-        <Video
-          src={mainVideoUrl}
-          style={{
-            width: '100%',
-            height: '100%',
-            objectFit: 'cover',
-          }}
-        />
-      </ZoomContainer>
+      {/* 2. Efeitos Sonoros (SFX) */}
+      {sfxTracks.map((sfx) => {
+        const fromFrame = Math.round(sfx.startInSeconds * fps);
+        return (
+          <Sequence key={sfx.id} from={fromFrame} durationInFrames={Math.round(2 * fps)}>
+            <Audio src={sfx.soundUrl} volume={sfx.volume ?? 0.6} />
+          </Sequence>
+        );
+      })}
+
+      {/* 3. Vídeo Principal com Color Grading e Zoom Dinâmico */}
+      <ColorGrade preset={colorGradePreset} brandGlowColor={brandHighlightColor}>
+        <ZoomContainer isZoomed={isZoomed}>
+          <Video
+            src={mainVideoUrl}
+            style={{
+              width: '100%',
+              height: '100%',
+              objectFit: 'cover',
+            }}
+          />
+        </ZoomContainer>
+      </ColorGrade>
 
       {/* Gradiente de contraste inferior suave */}
       <div
@@ -93,7 +117,7 @@ export const TalkingHeadReels: React.FC<TalkingHeadReelsProps> = ({
         }}
       />
 
-      {/* Overlays de B-Roll Cinematográficos (Pexels / IA) */}
+      {/* 4. Overlays de B-Roll Cinematográficos (Pexels / IA) */}
       {brolls.map((broll) => {
         const fromFrame = Math.round(broll.startInSeconds * fps);
         const durationFrames = Math.round(broll.durationInSeconds * fps);
@@ -114,7 +138,7 @@ export const TalkingHeadReels: React.FC<TalkingHeadReelsProps> = ({
         );
       })}
 
-      {/* Infográficos Animados em Glassmorphism */}
+      {/* 5. Infográficos Animados em Glassmorphism */}
       {infographics.map((info) => {
         const fromFrame = Math.round(info.startInSeconds * fps);
         const durationFrames = Math.round(info.durationInSeconds * fps);
@@ -136,7 +160,7 @@ export const TalkingHeadReels: React.FC<TalkingHeadReelsProps> = ({
         );
       })}
 
-      {/* Legendas Animadas Karaokê */}
+      {/* 6. Legendas Animadas Karaokê */}
       <Subtitles
         words={subtitlesWords}
         highlightColor={brandHighlightColor}
