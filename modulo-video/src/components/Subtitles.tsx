@@ -19,19 +19,19 @@ export const Subtitles: React.FC<SubtitlesProps> = ({
   highlightColor = '#FFE600',
   textColor = '#FFFFFF',
   fontSize = 62,
-}) => {
+}: SubtitlesProps) => {
   const frame = useCurrentFrame();
   const { fps } = useVideoConfig();
   const currentTime = frame / fps;
 
   // Encontrar o bloco de palavras ativo (janela de 3 a 5 palavras para não poluir a tela)
   const activeWordIndex = words.findIndex(
-    (w) => currentTime >= w.start && currentTime <= w.end
+    (w: WordToken) => currentTime >= w.start && currentTime <= w.end
   );
 
   if (activeWordIndex === -1 && words.length > 0) {
     // Se estiver entre palavras, pega a mais recente se a pausa for pequena
-    const lastWord = words.findLast((w) => currentTime >= w.end);
+    const lastWord = words.findLast((w: WordToken) => currentTime >= w.end);
     if (!lastWord || currentTime - lastWord.end > 0.6) {
       return null;
     }

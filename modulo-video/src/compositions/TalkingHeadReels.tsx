@@ -21,7 +21,7 @@ export interface SfxItem {
   volume?: number;
 }
 
-export interface TalkingHeadReelsProps {
+export type TalkingHeadReelsProps = {
   mainVideoUrl: string;
   backgroundMusicUrl?: string;
   musicVolume?: number;
@@ -40,7 +40,7 @@ export interface TalkingHeadReelsProps {
   brandHighlightColor?: string;
   colorGradePreset?: ColorGradePreset;
   sfxTracks?: SfxItem[];
-}
+};
 
 export const TalkingHeadReels: React.FC<TalkingHeadReelsProps> = ({
   mainVideoUrl,
@@ -53,14 +53,15 @@ export const TalkingHeadReels: React.FC<TalkingHeadReelsProps> = ({
   brandHighlightColor = '#00FF88',
   colorGradePreset = 'dark-moody',
   sfxTracks = [],
-}) => {
+}: TalkingHeadReelsProps) => {
   const frame = useCurrentFrame();
   const { fps } = useVideoConfig();
   const currentTime = frame / fps;
 
   // Verifica se o momento atual tem zoom ativo
   const isZoomed = zoomMoments.some(
-    (z) => currentTime >= z.startInSeconds && currentTime <= z.endInSeconds
+    (z: { startInSeconds: number; endInSeconds: number }) =>
+      currentTime >= z.startInSeconds && currentTime <= z.endInSeconds
   );
 
   return (

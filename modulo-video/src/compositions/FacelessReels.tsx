@@ -31,7 +31,7 @@ export interface SfxItem {
   volume?: number;
 }
 
-export interface FacelessReelsProps {
+export type FacelessReelsProps = {
   voiceAudioUrl: string;
   backgroundMusicUrl?: string;
   musicVolume?: number;
@@ -41,7 +41,7 @@ export interface FacelessReelsProps {
   brandHighlightColor?: string;
   colorGradePreset?: ColorGradePreset;
   sfxTracks?: SfxItem[];
-}
+};
 
 export const FacelessReels: React.FC<FacelessReelsProps> = ({
   voiceAudioUrl,
@@ -53,7 +53,7 @@ export const FacelessReels: React.FC<FacelessReelsProps> = ({
   brandHighlightColor = '#FFE600',
   colorGradePreset = 'dark-moody',
   sfxTracks = [],
-}) => {
+}: FacelessReelsProps) => {
   const { fps } = useVideoConfig();
 
   return (

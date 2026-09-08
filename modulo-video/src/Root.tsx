@@ -1,13 +1,13 @@
 import React from 'react';
 import { Composition } from 'remotion';
-import { FacelessReels } from './compositions/FacelessReels';
-import { TalkingHeadReels } from './compositions/TalkingHeadReels';
+import { FacelessReels, FacelessReelsProps } from './compositions/FacelessReels';
+import { TalkingHeadReels, TalkingHeadReelsProps } from './compositions/TalkingHeadReels';
 
 export const RemotionRoot: React.FC = () => {
   return (
     <>
       {/* 1. Composição de Vídeos 100% Faceless (a partir de áudio) */}
-      <Composition
+      <Composition<any, FacelessReelsProps>
         id="FacelessReels"
         component={FacelessReels}
         durationInFrames={30 * 15} // Exemplo de 15 segundos a 30 FPS
@@ -71,7 +71,7 @@ export const RemotionRoot: React.FC = () => {
       />
 
       {/* 2. Composição de Edição Talking Head (a partir de vídeo gravado) */}
-      <Composition
+      <Composition<any, TalkingHeadReelsProps>
         id="TalkingHeadReels"
         component={TalkingHeadReels}
         durationInFrames={30 * 15}

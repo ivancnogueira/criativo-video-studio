@@ -20,7 +20,7 @@ export const ColorGrade: React.FC<ColorGradeProps> = ({
   children,
   enableVignette = true,
   brandGlowColor,
-}) => {
+}: ColorGradeProps) => {
   // Configuração de Filtros de Cinema
   let filterCss = 'none';
 
